@@ -14,3 +14,5 @@ class Task(models.Model):
         verbose_name = 'Задача'
         verbose_name_plural = 'Задачи'
 
+    def __str__(self):
+        return self.title

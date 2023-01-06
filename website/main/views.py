@@ -1,10 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 from .forms import TaskForm
 from .forms import NewUserForm
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
+
+
+
+
+
 
 def index(request):
     tasks = Task.objects.all()
@@ -49,8 +54,9 @@ def create(request):
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('home')
+            task = form.save()
+            task.save()
+            return redirect('/', pk=task.pk)
         else:
             error = 'Ошибка'
 
@@ -66,5 +72,15 @@ def logout_request(request):
     logout(request)
     messages.info(request, "Вы успешно вышли из аккаунта")
     return redirect('home')
+
+
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+
+    if request.method == 'POST':
+        task.delete()
+        return redirect('/')
+
+    return redirect(request, 'base.html', {'task': task})
 
 

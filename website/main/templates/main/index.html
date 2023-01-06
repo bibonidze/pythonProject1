@@ -11,6 +11,10 @@
             <div class="alert alert-warning mt-2">
                 <h3>{{ el.title }}</h3>
                 <p>{{ el.task }}</p>
+                <form action="{% url 'task_delete' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-delete>">Удалить</button>
+            </form>
             </div>
         {% endfor %}
     {% else %}
